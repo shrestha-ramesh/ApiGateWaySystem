@@ -10,8 +10,11 @@ import org.springframework.web.context.request.RequestContextHolder;
 @RestController
 public class OrderController {
 
+
+
+
     @GetMapping("/order")
     public String getOrder(){
-        return "This is order service";
+        return HeaderUtil.getToken();
     }
 }

@@ -9,6 +9,6 @@ public class PaymentController {
 
     @GetMapping("/payment")
     public String getPayment(){
-        return "This payment service";
+        return HeaderUtil.getToken();
     }
 }

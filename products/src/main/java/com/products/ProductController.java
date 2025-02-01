@@ -9,6 +9,6 @@ public class ProductController {
 
     @GetMapping("/product")
     public String getProduct(){
-        return "This is product service";
+        return HeaderUtil.getToken();
     }
 }
