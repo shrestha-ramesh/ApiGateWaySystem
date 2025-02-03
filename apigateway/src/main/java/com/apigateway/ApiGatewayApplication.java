@@ -15,4 +15,13 @@ public class ApiGatewayApplication {
 		SpringApplication.run(ApiGatewayApplication.class, args);
 	}
 
+	@Bean
+	public RouteLocator myRoutes(RouteLocatorBuilder builder) {
+		return builder.routes()
+				.route(p -> p
+						.path("/order/**")
+						.uri("http://localhost:8083"))
+
+				.build();
+	}
 }
