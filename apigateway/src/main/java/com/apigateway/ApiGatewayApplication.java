@@ -18,20 +18,31 @@ public class ApiGatewayApplication {
 	@Autowired
 	private TokenValidationFilter tokenValidationFilter;
 
+
+	@Autowired
+	private RateLimitingFilter rateLimitingFilter;
+
 	@Bean
 	public RouteLocator myRoutes(RouteLocatorBuilder builder) {
 		return builder.routes()
 				.route(p -> p
 						.path("/order/**")
 						.filters(f -> f
-								.filter( tokenValidationFilter.apply(new TokenValidationFilter.Config()))
+								.filter(rateLimitingFilter.apply(new RateLimitingFilter.Config()))
+								.filter(tokenValidationFilter.apply(new TokenValidationFilter.Config()))
 						)
 						.uri("http://localhost:8083"))
 				.route(p -> p
 						.path("/product/**")
+						.filters(f->f
+								.filter(tokenValidationFilter.apply(new TokenValidationFilter.Config()))
+						)
 						.uri("http://localhost:8081"))
 				.route(p -> p
 						.path("/payment/**")
+						.filters(f -> f
+								.filter(tokenValidationFilter.apply(new TokenValidationFilter.Config()))
+						)
 						.uri("http://localhost:8082"))
 				.build();
 	}
