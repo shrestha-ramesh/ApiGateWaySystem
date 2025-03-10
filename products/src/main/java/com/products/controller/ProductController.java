@@ -1,14 +1,24 @@
-package com.products;
+package com.products.controller;
 
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.products.authorization.HeaderUtil;
+
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @RestController
+@RequestMapping("/product")
 public class ProductController {
 
-    @GetMapping("/product")
-    public String getProduct(){
+
+
+    @GetMapping("/token")
+    public String getToken(){
         return HeaderUtil.getToken();
     }
+
+
 }

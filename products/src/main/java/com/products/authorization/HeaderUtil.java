@@ -1,4 +1,4 @@
-package com.products;
+package com.products.authorization;
 
 public class HeaderUtil {
     private static final ThreadLocal<String> token = new ThreadLocal<>();
