@@ -1,16 +1,14 @@
-package com.products.authorization;
+package com.orders.auth;
 
 public class HeaderUtil {
     private static final ThreadLocal<String> token = new ThreadLocal<>();
-
-    public static void setToken(String tokenValue){
+    public static void setToken(String tokenValue) {
         token.set(tokenValue);
     }
-
-    public static String getToken(){
+    public static String getToken() {
         return token.get();
     }
-    public static void clear(){
+    public static void clear() {
         token.remove();
     }
 }

@@ -1,4 +1,4 @@
-package com.payment;
+package com.payment.auth;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;

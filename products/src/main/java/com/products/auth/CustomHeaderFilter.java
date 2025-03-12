@@ -1,4 +1,4 @@
-package com.products.authorization;
+package com.products.auth;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;

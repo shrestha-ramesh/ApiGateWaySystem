@@ -1,6 +1,6 @@
 package com.apigateway;
 
-import com.apigateway.authorization.TokenValidationFilter;
+import com.apigateway.auth.TokenValidationFilter;
 import com.apigateway.ratelimiter.RateLimitingFilter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

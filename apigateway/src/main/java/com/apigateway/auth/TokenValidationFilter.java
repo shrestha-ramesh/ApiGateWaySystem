@@ -1,4 +1,4 @@
-package com.apigateway.authorization;
+package com.apigateway.auth;
 
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;

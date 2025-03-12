@@ -1,12 +1,12 @@
-package com.payment;
+package com.products.auth;
 
 public class HeaderUtil {
-
-    public static final ThreadLocal<String> token = new ThreadLocal<>();
+    private static final ThreadLocal<String> token = new ThreadLocal<>();
 
     public static void setToken(String tokenValue){
         token.set(tokenValue);
     }
+
     public static String getToken(){
         return token.get();
     }

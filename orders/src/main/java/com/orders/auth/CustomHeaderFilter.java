@@ -1,4 +1,4 @@
-package com.orders;
+package com.orders.auth;
 
 
 import jakarta.servlet.*;
@@ -7,7 +7,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.Enumeration;
 
 
 @Component
