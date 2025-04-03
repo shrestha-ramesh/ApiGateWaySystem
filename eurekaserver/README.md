@@ -46,6 +46,10 @@ To build the application, run the following command in the project root director
 ```
 ./gradlew build
 ```
+To run the application, use:
+```
+./gradlew bootRun
+```
 Alternatively, you can run the generated JAR file:
 ``` 
 java -jar build/libs/eureka-server-0.0.1-SNAPSHOT.jar
