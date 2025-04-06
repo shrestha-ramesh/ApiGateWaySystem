@@ -12,3 +12,6 @@ eureka:
   instance:
     preferIpAddress: true
     nonSecurePort: 8083
+
+queries:
+  update-order-status: "UPDATE OrderRequest SET orderStatus = :status WHERE orderId = :id"

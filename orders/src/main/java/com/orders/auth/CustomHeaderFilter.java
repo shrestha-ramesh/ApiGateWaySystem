@@ -17,12 +17,6 @@ public class CustomHeaderFilter implements Filter {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
 
-//        Enumeration<String> headerNames = httpRequest.getHeaderNames();
-//        while (headerNames.hasMoreElements()) {
-//            String headerName = headerNames.nextElement();
-//            String headerValue = httpRequest.getHeader(headerName);
-//            System.out.println(headerName + ": " + headerValue);
-//        }
         System.out.println("This is httpRequest "+httpRequest.getHeader("authorization"));
         String authorization = httpRequest.getHeader("authorization").trim();
         String token = getTokenFromBearerString(authorization);
