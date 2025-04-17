@@ -9,3 +9,6 @@ eureka:
   client:
     serviceUrl:
       defaultZone: http://localhost:8761/eureka/
+
+queries:
+  update-payment-status: "UPDATE PaymentRequest SET paymentStatus= :status WHERE paymentId = :id"
