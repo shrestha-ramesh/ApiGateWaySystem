@@ -1,13 +1,20 @@
-package com.delivery;
+package com.delivery.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.delivery.model.DeliveryRequest;
+import com.delivery.model.DeliveryStatus;
+import com.delivery.service.DeliveryService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/delivery")
 public class DeliveryController {
+
+    private final DeliveryService deliveryService;
+
+    public DeliveryController(DeliveryService deliveryService){
+        this.deliveryService = deliveryService;
+    }
 
     @GetMapping("/token")
     public String getToken(){
@@ -16,18 +23,33 @@ public class DeliveryController {
     }
 
     @PostMapping("/schedule")
-    public String scheduleDelivery(){
-        boolean isSchedule = DeliveryService.scheduleDelivery();
+    public String scheduleDelivery(@RequestBody DeliveryRequest deliveryRequest){
+        boolean isSchedule = true;
         return "schedule";
     }
-    @PostMapping("/cancel/{scheduleId}")
-    public DeliveryRequest cancelDelivery(){
-        String deliveryId = IdGenerator.generateDeliveryId();
+    @PutMapping("{scheduleId}/{orderId}/transit")
+    public ResponseEntity<String> inTransitDelivery(@PathVariable int scheduleId, @PathVariable int orderId){
+        System.out.printf("This is transit %d, %d",scheduleId, orderId);
+        deliveryService.inTransitDelivery(scheduleId, orderId);
+        return ResponseEntity.ok("In transit ");
+    }
+    @PutMapping("{scheduleId}/{orderId}/delivered")
+    public ResponseEntity<String> delivered(@PathVariable int scheduleId, @PathVariable int orderId){
+        deliveryService.delivered(scheduleId, orderId);
+        return ResponseEntity.ok("Delivery");
+    }
+    @PutMapping("{scheduleId}/{orderId}/fail")
+    public ResponseEntity<String> failDelivery(@PathVariable int scheduleId, @PathVariable int orderId){
+        deliveryService.failDelivery(scheduleId, orderId);
+        return ResponseEntity.ok("fail");
+    }
+    @PutMapping("{scheduleId}/{orderId}/cancel")
+    public DeliveryRequest cancelDelivery(@PathVariable int scheduleId, int orderId){
         DeliveryRequest deliveryRequest = DeliveryRequest.builder()
-                .deliveryId(deliveryId)
+                .deliveryId(4)
                 .deliveryStatus(DeliveryStatus.DELIVERED)
                 .build();
-        boolean isCancel = DeliveryService.cancelDelivery();
+        boolean isCancel = deliveryService.cancelDelivery(scheduleId, orderId);
         return deliveryRequest;
     }
 }
