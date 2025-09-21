@@ -1,0 +1,11 @@
+spring:
+  banner:
+    location: classpath:banner.txt
+  application:
+    name: delivery
+
+server:
+  port: 8084
+
+queries:
+  update-delivery-status: "UPDATE DeliveryRequest SET deliveryStatus = :status WHERE deliveryId = :id"

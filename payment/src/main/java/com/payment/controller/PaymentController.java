@@ -26,9 +26,9 @@ public class PaymentController {
     @PostMapping("/process")
     public ResponseEntity<String> processPayment(@RequestBody PaymentRequest paymentRequest){
         boolean isProcess = true;
-        String s = paymentService.handlePaymentLifecycle(paymentRequest);
-        System.out.println(s);
-
+//        String s = paymentService.handlePaymentLifecycle(paymentRequest);
+//        System.out.println(s);
+        System.out.println("This is processPayment");
         return isProcess ?
                 ResponseEntity.ok("Payment Service Successfully"):
                 ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Order Failed");

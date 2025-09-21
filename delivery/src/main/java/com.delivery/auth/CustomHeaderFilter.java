@@ -1,5 +1,4 @@
-//package com.orders.auth;
-//
+//package com.delivery.auth;
 //
 //import jakarta.servlet.*;
 //import jakarta.servlet.http.HttpServletRequest;
@@ -33,3 +32,4 @@
 //        return spaceIndex != -1 ? authorization.substring(spaceIndex + 1) : "";
 //    }
 //}
+//

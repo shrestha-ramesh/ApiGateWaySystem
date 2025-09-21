@@ -1,4 +1,4 @@
-//package com.payment.config;
+//package com.delivery.config;
 //
 //import org.springframework.context.annotation.Bean;
 //import org.springframework.context.annotation.Configuration;
@@ -12,15 +12,15 @@
 //public class SecurityConfig {
 //
 //    @Bean
-//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
-//        http
-//                .authorizeHttpRequests(authorizeRequests ->
+//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+//        http.authorizeHttpRequests(authorizeRequests ->
 //                authorizeRequests
-//                        .requestMatchers(new IpAddressMatcher("127.0.0.1"))
+//                        .requestMatchers(new IpAddressMatcher("127.0.0.1")) // Allow only localhost access
 //                        .permitAll()
 //                        .anyRequest()
 //                        .authenticated()
-//        ).csrf(csrf->csrf.disable());
+//        ).csrf(csrf -> csrf.disable());
 //        return http.build();
 //    }
 //}
+//
