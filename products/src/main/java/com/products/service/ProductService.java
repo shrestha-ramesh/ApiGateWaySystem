@@ -32,6 +32,7 @@ public class ProductService {
     }
 
     public Products findAllProduct() {
+        String productString = "stringProduct";
         SessionFactory sessionFactory = new Configuration()
                 .addAnnotatedClass(com.products.model.Product.class)
                 .configure().buildSessionFactory();
