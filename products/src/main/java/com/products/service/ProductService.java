@@ -16,7 +16,7 @@ import java.util.List;
 @Service
 public class ProductService {
     public Products saveProduct(Products products) {
-        String test1 = "test one";
+        String test1 = "test one first";
         SessionFactory sessionFactory = new Configuration()
                 .addAnnotatedClass(com.products.model.Product.class)
                 .configure().buildSessionFactory();
