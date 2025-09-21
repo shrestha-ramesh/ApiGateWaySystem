@@ -33,7 +33,6 @@ public class ProductService {
     }
 
     public Products findAllProduct() {
-        String test2 = "test two second";
         SessionFactory sessionFactory = new Configuration()
                 .addAnnotatedClass(com.products.model.Product.class)
                 .configure().buildSessionFactory();
