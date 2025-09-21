@@ -33,7 +33,7 @@ public class ProductService {
     }
 
     public Products findAllProduct() {
-        String produceCheck = "product check";
+        String test2 = "test two";
         SessionFactory sessionFactory = new Configuration()
                 .addAnnotatedClass(com.products.model.Product.class)
                 .configure().buildSessionFactory();
