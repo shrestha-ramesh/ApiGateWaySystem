@@ -1,6 +1,5 @@
 package com.payment.service;
 
-
 import com.payment.model.PaymentMethod;
 import com.payment.model.PaymentRequest;
 import com.payment.model.PaymentStatus;
@@ -20,40 +19,46 @@ public class PaymentService {
 
     @Value("${queries.update-payment-status}")
     private String updatePaymentStatusQuery;
-    public PaymentService(PaymentProcessorFactory paymentProcessorFactory){
+
+    public PaymentService(PaymentProcessorFactory paymentProcessorFactory) {
         this.paymentProcessorFactory = paymentProcessorFactory;
     }
-    public String handlePaymentLifecycle(PaymentRequest paymentRequest){
+
+    public String handlePaymentLifecycle(PaymentRequest paymentRequest) {
         boolean isProcessed = processPayment(paymentRequest);
         boolean isCompleted;
-        if(isProcessed){
+        if (isProcessed) {
             isCompleted = completePayment(paymentRequest.getPaymentId());
         }
         return "isCompleted && isProcessed";
 
     }
-    public boolean processPayment(PaymentRequest paymentRequest){
+
+    public boolean processPayment(PaymentRequest paymentRequest) {
         paymentRequest.setPaymentMethod(PaymentMethod.CREDIT_CARD);
-        if(paymentRequest.getAmount() < 0 || paymentRequest.getPaymentMethod() == null){
+        if (paymentRequest.getAmount() < 0 || paymentRequest.getPaymentMethod() == null) {
             return false;
         }
         PaymentProcessor paymentProcessor = paymentProcessorFactory.getProcessor(paymentRequest.getPaymentMethod());
         boolean isSuccess = paymentProcessor.processPayment(paymentRequest);
-        if (!isSuccess){
+        if (!isSuccess) {
             return false;
         }
         paymentRequest.setPaymentStatus(PaymentStatus.COMPLETED);
         savePaymentData(paymentRequest);
         return true;
     }
+
     public boolean completePayment(int transactionId) {
         int rowsAffected = updatePaymentStatus(transactionId, PaymentStatus.COMPLETED);
         return rowsAffected > 0 ? true : false;
     }
+
     public boolean failPayment(int transactionId) {
         int rowsAffected = updatePaymentStatus(transactionId, PaymentStatus.FAILED);
         return rowsAffected > 0 ? true : false;
     }
+
     public boolean refundPayment(int transactionId) {
         PaymentMethod card = PaymentMethod.CREDIT_CARD;
         PaymentProcessor paymentProcessor = paymentProcessorFactory.getProcessor(card);
@@ -62,6 +67,7 @@ public class PaymentService {
         int rowsAffected = updatePaymentStatus(transactionId, PaymentStatus.REFUND);
         return rowsAffected > 0 ? true : false;
     }
+
     private int updatePaymentStatus(int transactionId, PaymentStatus paymentStatus) {
         SessionFactory sessionFactory = new Configuration().addAnnotatedClass(com.payment.model.PaymentRequest.class)
                 .configure("payment-hibernate.cfg.xml").buildSessionFactory();
@@ -74,12 +80,13 @@ public class PaymentService {
         transaction.commit();
         return rowsAffected;
     }
-    public void savePaymentData(PaymentRequest paymentRequest){
+
+    public void savePaymentData(PaymentRequest paymentRequest) {
         SessionFactory sessionFactory = new Configuration().addAnnotatedClass(com.payment.model.PaymentRequest.class)
                 .configure("payment-hibernate.cfg.xml").buildSessionFactory();
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
-        session.save(paymentRequest);
+        session.persist(paymentRequest);
         transaction.commit();
     }
 }

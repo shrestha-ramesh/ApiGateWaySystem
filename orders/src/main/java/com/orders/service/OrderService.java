@@ -20,13 +20,15 @@ public class OrderService {
 
     @Value("${queries.update-order-status}")
     private String updateOrderStatusQuery;
-    public boolean createOrder(OrderRequest orderRequest){
+
+    public boolean createOrder(OrderRequest orderRequest) {
         orderRequest.setOrderStatus(OrderStatus.PENDING);
         getTotalAmount(orderRequest);
         System.out.println(orderRequest);
         saveOrderData(orderRequest);
         return true;
     }
+
     public boolean processOrder(int orderId) {
         int rowsAffected = updateOrderStatus(orderId, OrderStatus.PROCESSING);
         return rowsAffected > 0 ? true : false;
@@ -38,23 +40,26 @@ public class OrderService {
     }
 
     public boolean deliverOrder(int orderId) {
-        int rowsAffected =  updateOrderStatus(orderId, OrderStatus.DELIVERED);
+        int rowsAffected = updateOrderStatus(orderId, OrderStatus.DELIVERED);
         return rowsAffected > 0 ? true : false;
     }
-    public boolean cancelOrder(int orderId){
+
+    public boolean cancelOrder(int orderId) {
         int rowsAffected = updateOrderStatus(orderId, OrderStatus.CANCELLED);
         return rowsAffected > 0 ? true : false;
     }
-    public void saveOrderData(OrderRequest orderRequest){
+
+    public void saveOrderData(OrderRequest orderRequest) {
         SessionFactory sessionFactory = new Configuration().addAnnotatedClass(com.orders.model.OrderRequest.class)
                 .configure("product-hibernate.cfg.xml").buildSessionFactory();
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
-        session.save(orderRequest);
+        session.persist(orderRequest);
         transaction.commit();
         System.out.println("This data is saved");
     }
-    public int updateOrderStatus(int orderId, OrderStatus orderStatus){
+
+    public int updateOrderStatus(int orderId, OrderStatus orderStatus) {
         SessionFactory sessionFactory = new Configuration().addAnnotatedClass(com.orders.model.OrderRequest.class)
                 .configure("product-hibernate.cfg.xml").buildSessionFactory();
         Session session = sessionFactory.openSession();
@@ -66,16 +71,17 @@ public class OrderService {
         transaction.commit();
         return rowsAffected;
     }
-    public double getTotalAmount(OrderRequest orderRequest){
+
+    public double getTotalAmount(OrderRequest orderRequest) {
         List<Product> products = new ArrayList<>();
         SessionFactory sessionFactory = new Configuration().addAnnotatedClass(com.orders.model.Product.class)
                 .configure("product-hibernate.cfg.xml").buildSessionFactory();
-        Session session= sessionFactory.openSession();
+        Session session = sessionFactory.openSession();
 
-        if(orderRequest.getProductIds() == null){
+        if (orderRequest.getProductIds() == null) {
             return 0;
-        }else {
-            orderRequest.getProductIds().forEach(id->{
+        } else {
+            orderRequest.getProductIds().forEach(id -> {
                 Product product = session.get(Product.class, id);
                 products.add(product);
             });

@@ -26,7 +26,8 @@ public class DeliveryService {
     private String updateDeliveryStatusQuery;
     private RestTemplate restTemplate;
     private HttpHeaders httpHeaders;
-    public DeliveryService(RestTemplate restTemplate, HttpHeaders httpHeaders){
+
+    public DeliveryService(RestTemplate restTemplate, HttpHeaders httpHeaders) {
         this.restTemplate = restTemplate;
         this.httpHeaders = httpHeaders;
     }
@@ -40,30 +41,35 @@ public class DeliveryService {
                 .state("Illinois")
                 .city("Chicago").build());
         deliveryRequest.setScheduleDeliveryTime(LocalDateTime.now());
-        if(deliveryRequest == null || deliveryRequest.getDeliveryAddress() == null || deliveryRequest.getScheduleDeliveryTime()==null) {
+        if (deliveryRequest == null || deliveryRequest.getDeliveryAddress() == null
+                || deliveryRequest.getScheduleDeliveryTime() == null) {
             return false;
         }
         saveDeliveryData(deliveryRequest);
         return true;
     }
+
     public boolean inTransitDelivery(int deliveryId, int orderId) {
         System.out.printf("This is in transit delivery %d, %d", deliveryId, orderId);
         int rowsAffected = updateDeliveryStatus(deliveryId, orderId, DeliveryStatus.IN_TRANSIT);
         return rowsAffected > 0 ? true : false;
     }
+
     public boolean delivered(int deliveryId, int orderId) {
         int rowsAffected = updateDeliveryStatus(deliveryId, orderId, DeliveryStatus.DELIVERED);
         return rowsAffected > 0 ? true : false;
     }
 
     public boolean failDelivery(int deliveryId, int orderId) {
-        int rowsAffected = updateDeliveryStatus(deliveryId,orderId, DeliveryStatus.FAILED);
+        int rowsAffected = updateDeliveryStatus(deliveryId, orderId, DeliveryStatus.FAILED);
         return rowsAffected > 0 ? true : false;
     }
+
     public boolean cancelDelivery(int deliveryId, int orderId) {
         int rowsAffected = updateDeliveryStatus(deliveryId, orderId, DeliveryStatus.CANCELLED);
         return rowsAffected > 0 ? true : false;
     }
+
     private void saveDeliveryData(DeliveryRequest deliveryRequest) {
         SessionFactory sessionFactory = new Configuration()
                 .addAnnotatedClass(com.delivery.model.DeliveryRequest.class)
@@ -71,9 +77,10 @@ public class DeliveryService {
                 .configure("delivery-hibernate.cfg.xml").buildSessionFactory();
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
-        session.save(deliveryRequest);
+        session.persist(deliveryRequest);
         transaction.commit();
     }
+
     private int updateDeliveryStatus(int deliveryId, int orderId, DeliveryStatus deliveryStatus) {
         SessionFactory sessionFactory = new Configuration()
                 .addAnnotatedClass(com.delivery.model.DeliveryRequest.class)
@@ -86,22 +93,23 @@ public class DeliveryService {
         query.setParameter("status", deliveryStatus);
         query.setParameter("id", deliveryId);
 
-        if(deliveryStatus == DeliveryStatus.IN_TRANSIT){
+        if (deliveryStatus == DeliveryStatus.IN_TRANSIT) {
             updateOrderStatus(orderId, "ship");
-        }else if(deliveryStatus == DeliveryStatus.DELIVERED){
+        } else if (deliveryStatus == DeliveryStatus.DELIVERED) {
 
             updateOrderStatus(orderId, "deliver");
-        }else if(deliveryStatus == DeliveryStatus.CANCELLED){
+        } else if (deliveryStatus == DeliveryStatus.CANCELLED) {
             updateOrderStatus(orderId, "cancel");
         }
         int rowsAffected = query.executeUpdate();
         transaction.commit();
         return rowsAffected;
     }
-    public void updateOrderStatus(int orderId, String orderStatus){
+
+    public void updateOrderStatus(int orderId, String orderStatus) {
         String URL = UriComponentsBuilder.fromUriString("http://localhost:8083")
                 .path("/order/{orderId}/{orderStatus}")
-                .buildAndExpand(orderId,orderStatus).toUriString();
+                .buildAndExpand(orderId, orderStatus).toUriString();
         HttpEntity<Void> requestEntity = new HttpEntity<>(httpHeaders);
         ResponseEntity<String> response = restTemplate.exchange(URL, HttpMethod.PUT, requestEntity, String.class);
         System.out.println(response.getBody());

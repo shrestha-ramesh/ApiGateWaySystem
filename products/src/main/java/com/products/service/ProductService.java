@@ -25,7 +25,7 @@ public class ProductService {
 
         products.getProducts().forEach(product -> {
             Transaction transaction = session.beginTransaction();
-            session.save(product);
+            session.persist(product);
             transaction.commit();
         });
 
